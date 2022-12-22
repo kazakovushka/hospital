@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+<includeAll path="changelogs/" relativeToChangelogFile="true"/>
+
+    <changeSet author="elena" id="1">
+        <createTable tableName="ILLNESS">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="code_ix1"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="elena" id="2">
+        <createTable tableName="PATIENT">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)"/>
+            <column name="modified_timestamp" type="timestamp"/>
+            <column name="updates_count" type="BIGINT"/>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet author="elena" id="3">
+        <insert tableName="ILLNESS">
+            <column name="code" value="100.1.3"/>
+            <column name="description" value="Flu"/>
+        </insert>
+        <insert tableName="ILLNESS">
+            <column name="code" value="773.2.2"/>
+            <column name="description" value="Сhickenpox"/>
+        </insert>
+        <insert tableName="ILLNESS">
+            <column name="code" value="400.3.3"/>
+            <column name="description" value="Allergy"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="elena" id="4">
+        <insert tableName="PATIENT">
+            <column name="name" value="Vasya"/>
+            <column name="surname" value="Pupkin"/>
+            <column name="phone" value="332-44-22"/>
+            <column name="modified_timestamp" value="2022-12-07 15:31:25-07"/>
+            <column name="updates_count" value="0"/>
+        </insert>
+        <insert tableName="PATIENT">
+            <column name="name" value="Ilya"/>
+            <column name="surname" value="Sotnikov"/>
+            <column name="phone" value="777-77-77"/>
+            <column name="modified_timestamp" value="2022-12-07 15:31:25-07"/>
+            <column name="updates_count" value="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="elena" id="5">
+        <addUniqueConstraint
+                columnNames="name, surname"
+                constraintName="full_name"
+                tableName="patient"
+        />
+    </changeSet>
+
+    <changeSet author="elena" id="6">
+        <createTable tableName="illness_history">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="patient_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_patient" references="patient(id)"/>
+            </column>
+            <column name="illness_id" type="int">
+               <!-- <constraints nullable="false" foreignKeyName="fk_illness" references="illness(id)"/>-->
+            </column>
+            <column name="start_date" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="elena" id="7">
+        <insert tableName="illness_history">
+            <column name="patient_id" value="1"/>
+            <column name="illness_id" value="1"/>
+            <column name="start_date" value="2022-12-05"/>
+            <column name="end_date" value="2022-12-07"/>
+            <column name="description" value="SOme bla bla"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
